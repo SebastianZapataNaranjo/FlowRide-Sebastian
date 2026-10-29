@@ -47,7 +47,7 @@ Pesos tomados de la prioridad global de los Drivers. El costo es restricción el
 
 Cálculo: Σ(peso × puntaje) / 39. Para la opción elegida: (11·5 + 10·5 + 8·4 + 7·5 + 2·3 + 1·2) / 39 = 180 / 39 = 4,62.
 
-**El Silo de datos** era la alternativa más fuerte. Era, además, lo que asumía la versión anterior de CLAUDE.md (una API que atiende dos bases). Se descarta porque obliga a resolver el tenant en cada mensaje (por `phone_number_id` contra el control plane). Eso pone el control plane en el camino crítico de **todos** los operadores y deja las credenciales de varias bases dentro del mismo proceso.
+**El Silo de datos** era la alternativa más fuerte. Era, además, el planteamiento inicial de esta versión (oct 2026) para el entorno local: una API que atiende dos bases. Se descarta porque obliga a resolver el tenant en cada mensaje (por `phone_number_id` contra el control plane). Eso pone el control plane en el camino crítico de **todos** los operadores y deja las credenciales de varias bases dentro del mismo proceso.
 
 ## Consecuencias
 

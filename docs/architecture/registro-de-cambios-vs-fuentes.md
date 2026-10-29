@@ -1,6 +1,6 @@
 # Registro de cambios frente a las fuentes
 
-Las fuentes de `docs/_fuentes/` son trabajo previo a mejorar (CLAUDE.md §2). Cada cambio dice **qué decía la fuente**, **qué dice ahora** y **por qué** (evidencia o criterio). Fecha de todos los cambios: 2026-10-28. Las URL se consultaron en esa fecha.
+Las fuentes de `docs/_fuentes/` son trabajo previo a mejorar: ninguna decisión hereda validez automática (contexto v10 §0.1). Cada cambio dice **qué decía la fuente**, **qué dice ahora** y **por qué** (evidencia o criterio). Fecha de todos los cambios: 2026-10-28. Las URL se consultaron en esa fecha.
 
 ## 1. Equivalencia de numeraciones de ADR
 
@@ -23,7 +23,7 @@ Las fuentes de `docs/_fuentes/` son trabajo previo a mejorar (CLAUDE.md §2). Ca
 | 0015 Borde común — Diseñado | — | 0012 | — | — |
 | 0016 Almacenamiento de objetos — Diseñado | — | 0013 | — | — |
 
-CLAUDE.md usaba una quinta numeración (0005 WhatsApp, 0006 outbox, 0007 caché); se actualiza a esta tabla.
+Al inicio de esta versión (oct 2026) se trabajaba con la numeración de la serie de 11 ADR (0005 WhatsApp, 0006 outbox, 0007 caché); se reemplaza por esta tabla.
 
 ## 2. Cambios de alcance y requisitos
 
@@ -36,14 +36,14 @@ CLAUDE.md usaba una quinta numeración (0005 WhatsApp, 0006 outbox, 0007 caché)
 | 5 | Drivers, RF-01 | Todos los usuarios, incluidos pasajero y conductor, se autentican con correo, contraseña y token | El token aplica al panel (Diseñado). Pasajero y conductor se identifican por su teléfono | En el canal WhatsApp no hay sesión ni token |
 | 6 | Drivers, RF-11 | Reglas configurables, incluidas las "restricciones regulatorias" | Tres niveles; las eliminatorias legales (licencia C, SOAT, RTM) **no** son configurables | Una obligación legal no puede desactivarse por configuración |
 | 7 | — | No definido | La hora que da el pasajero es la de **presentación en destino**; la recogida se calcula con una matriz estática | Ataca el dolor de los horarios estrictos. Riesgo declarado: la matriz no considera el tráfico; la promesa queda registrada pero no es verificable sin RF-18 |
-| 8 | CLAUDE.md §5 y §7 | Una API que atiende dos bases de tenant; F1 = RF-08 | Un stack (API + Worker + BD) por operador; compose con `api-a`, `worker-a`, `api-b`, `worker-b`, `whatsapp-sim`, `postgres`; F1 mapeada como en el punto 1 | Decisión P3 de la ronda 1 (ADR-0002) |
+| 8 | Planteamiento inicial de esta versión (oct 2026) | Una API que atiende dos bases de tenant; F1 = RF-08 | Un stack (API + Worker + BD) por operador; compose con `api-a`, `worker-a`, `api-b`, `worker-b`, `whatsapp-sim`, `postgres`; F1 mapeada como en el punto 1 | Decisión P3 de la ronda 1 (ADR-0002) |
 
 ## 3. Cambios de arquitectura y decisiones
 
 | # | Fuente | Decía | Dice ahora | Por qué |
 |---|---|---|---|---|
 | 9 | ADR-0002 del xlsx | El tenant se resuelve con un claim `tenantid` en el JWT | El tenant lo fija el despliegue; no hay código de resolución de tenant | Un claim es una resolución propia de Pool; en Silo por stack sobra y abre una superficie (ADR-0002) |
-| 10 | Contexto v10 §8.3, CLAUDE, Restricciones técnicas, banco (`PAS-DISP-01`, `COND-DISP-01`) | Canal WhatsApp ≥ 99,9 % | Stack ≥ 99,5 % + **0 mensajes perdidos**; disponibilidad compuesta calculada; HA como opción contractual | Meta no ofrece SLA ([Support FAQ](https://developers.facebook.com/docs/whatsapp/cloud-api/support/)); ACA 99,95 % × PostgreSQL 99,9 % ya deja un techo de 99,85 % (ADR-0009) |
+| 10 | Contexto v10 §8.3, Restricciones técnicas, banco (`PAS-DISP-01`, `COND-DISP-01`) | Canal WhatsApp ≥ 99,9 % | Stack ≥ 99,5 % + **0 mensajes perdidos**; disponibilidad compuesta calculada; HA como opción contractual | Meta no ofrece SLA ([Support FAQ](https://developers.facebook.com/docs/whatsapp/cloud-api/support/)); ACA 99,95 % × PostgreSQL 99,9 % ya deja un techo de 99,85 % (ADR-0009) |
 | 11 | ADR-0010 del xlsx | Ya había bajado el canal a 99,5 % (revisión del 22-09) sin el cálculo | Igual, con el cálculo y la medida "0 perdidos" | Coherencia entre fuentes |
 | 12 | ADR-05 del tradeoff / ADR-0008 del xlsx | Twilio (DOO) / "Sandbox para el alcance académico" | Meta Cloud API directo; Twilio descartado: ~108 USD/mes extra por operador y sandbox de número compartido | [Twilio pricing](https://www.twilio.com/en-us/whatsapp/pricing), [Twilio Sandbox](https://www.twilio.com/docs/whatsapp/sandbox); regla de no usar justificaciones académicas |
 | 13 | `adr-previos/adr-0005-…` (Meta) | (1) "5 números de prueba"; (2) canal de contingencia SMS/correo; (3) "alcance del semestre"; (4) ADR-0003 = JWT HMAC; (5) Twilio "20–40 % del costo" sin cálculo | (1) Un número con hasta 5 destinatarios; (2) eliminado; (3) argumento de canal único; (4) identidad en ADR-0005/0011; (5) cálculo en ADR-0005 §5 | Ver ADR-0005, sección de correcciones |
